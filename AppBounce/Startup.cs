@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using AppBounce.Hubs;
 using AppCommon;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,6 +66,8 @@ namespace AppBounce
                     options.ClientId = "mvc";
                     options.SaveTokens = true;
                 });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +94,11 @@ namespace AppBounce
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChatHub>("/chathub");
             });
         }
     }
